@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TestsModule } from './modules/tests';
+import { UsersModule } from './modules/users';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { TestsModule } from './modules/tests';
       entities: [__dirname + '/**/entitys/*{.ts,.js}'],
       synchronize: false,
     }),
-    TestsModule,
+    TestsModule, UsersModule
   ],
   controllers: [AppController],
   providers: [AppService],
