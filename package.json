@@ -32,11 +32,13 @@
     "date-fns": "^2.27.0",
     "helmet": "^4.6.0",
     "log4js": "^6.3.0",
+    "mysql": "^2.18.1",
     "mysql2": "^2.3.3",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
-    "typeorm": "^0.2.41"
+    "typeorm": "^0.2.41",
+    "xlsx": "^0.17.4"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",
