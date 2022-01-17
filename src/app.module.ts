@@ -7,6 +7,8 @@ import { TestsModule } from './modules/tests';
 import { ProductsModule } from './modules/products';
 import { ProductAttrModule } from './modules/productAttr';
 import { EventsModule } from './modules/events';
+import { UsersModule } from './modules/users';
+
 
 @Module({
   imports: [
@@ -27,7 +29,8 @@ import { EventsModule } from './modules/events';
     TestsModule,
     ProductsModule,
     ProductAttrModule,
-    EventsModule
+    EventsModule,
+    UsersModule
   ],
   controllers: [AppController],
   providers: [AppService],
