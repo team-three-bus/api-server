@@ -4,7 +4,11 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TestsModule } from './modules/tests';
+import { ProductsModule } from './modules/products';
+import { ProductAttrModule } from './modules/productAttr';
+import { EventsModule } from './modules/events';
 import { UsersModule } from './modules/users';
+
 
 @Module({
   imports: [
@@ -20,9 +24,13 @@ import { UsersModule } from './modules/users';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       entities: [__dirname + '/**/entitys/*{.ts,.js}'],
-      synchronize: false,
+      synchronize: true,
     }),
-    TestsModule, UsersModule
+    TestsModule,
+    ProductsModule,
+    ProductAttrModule,
+    EventsModule,
+    UsersModule
   ],
   controllers: [AppController],
   providers: [AppService],
