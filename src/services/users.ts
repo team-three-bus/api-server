@@ -1,14 +1,30 @@
 import { Injectable } from '@nestjs/common';
+import { UsersDao } from '../dao/users';
+import { AddUsersDto } from '../dto/users';
+import { createJWT } from '../utils/jwt';
 import axios from "axios";
 
 
 @Injectable()
 export class UsersService {
+  public constructor(private usersDao: UsersDao) {}
   
   public async login(token: string) {
     const kakaoUser = await this.getKakaoUser(token);
-
-    return kakaoUser;
+    const socialId = kakaoUser.data.id;
+    const isUser = await this.isUser(socialId);
+    
+    if (!isUser) {
+      // 가입 되어 있지 않기 때문에 가입 진행 
+      await this.joinUser({
+        socialId: socialId,
+        nickname: kakaoUser.data.kakao_account.profile.nickname,
+        platformType: 'kakao',
+        gender: kakaoUser.data.kakao_account.age_range,
+        ageRange: kakaoUser.data.kakao_account.gender,
+      });
+    }
+    return createJWT(socialId);
   }
 
   public async getKakaoUser(token: string) {
@@ -24,5 +40,13 @@ export class UsersService {
       result: "SUCCESS",
       data: kakaoRes.data
     }
+  }
+
+  public async isUser(socialId: string) {
+    return await this.usersDao.getUser(socialId);
+  }
+
+  public async joinUser(user: AddUsersDto) {
+    await this.usersDao.addUser(user);
   }
 }

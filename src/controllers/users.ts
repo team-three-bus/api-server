@@ -8,9 +8,11 @@ export class UsersController {
   
   @Post('/')
   public async login(@Headers() headers): Promise<any> {
-    console.log(headers);
+    
     const userData = await this.usersService.login(headers.authorization);
-    console.log(userData);
-    return userData;
+    
+    return {
+      jwt: userData
+    };
   }
 }
