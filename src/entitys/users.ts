@@ -21,8 +21,14 @@ export class UsersEntity {
   @Column()
   platformType: string;
 
-  @Column()
-  status: string;
+  @Column({nullable: true})
+  gender: string;
+
+  @Column({nullable: true})
+  ageRange: string;
+
+  // @Column()
+  // status: string;
 
   @Column()
   @CreateDateColumn()
