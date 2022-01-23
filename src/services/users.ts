@@ -12,8 +12,7 @@ export class UsersService {
   public async login(token: string) {
     const kakaoUser = await this.getKakaoUser(token);
     const socialId = kakaoUser.data.id;
-    const isUser = await this.isUser(socialId);
-    
+    const isUser = await this.getUser(socialId);
     if (!isUser) {
       // 가입 되어 있지 않기 때문에 가입 진행 
       await this.joinUser({
@@ -42,7 +41,7 @@ export class UsersService {
     }
   }
 
-  public async isUser(socialId: string) {
+  public async getUser(socialId: string) {
     return await this.usersDao.getUser(socialId);
   }
 
