@@ -23,9 +23,6 @@ export class ProductAttrEntity {
   @Column()
   productId: string;
 
-  @Column()
-  category: string;
-
   @Index()
   @Column()
   firstAttr: string;

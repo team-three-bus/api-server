@@ -30,6 +30,9 @@ export class ProductsEntity {
   price: number;
 
   @Column()
+  category: string;
+
+  @Column()
   isEvent: boolean;
 
   @Column({default: 0})
