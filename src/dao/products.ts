@@ -18,11 +18,17 @@ export class ProductsDao {
   }
 
   public async getProduct(id: number): Promise<ProductsEntity> {
-    return this.productsRepository.findOne({
-      where: {
+    return await this.productsRepository.createQueryBuilder('product')
+      .leftJoinAndMapMany(
+        'product.events',
+        EventsEntity,
+        'events',
+        'events.productId = product.id',
+      )
+      .where({
         id: id
-      }
-    });
+      })
+      .getOne();
   }
   
   public async upViewCnt(id: number, viewCnt: number) {
