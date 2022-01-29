@@ -34,7 +34,7 @@ export class ProductsDao {
     eventIdList: string[]
   ): Promise<[ProductsEntity[], number]> {
     const [list, count] = await this.productsRepository.createQueryBuilder('product')
-      .leftJoinAndMapOne(
+      .leftJoinAndMapMany(
         'product.events',
         EventsEntity,
         'events',

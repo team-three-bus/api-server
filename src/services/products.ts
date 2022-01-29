@@ -37,11 +37,25 @@ export class ProductsService {
       category, page, brand, orderOrderBy.key, orderOrderBy.condition, eventIdList
       );
     const pageSize = Math.ceil(count / PRODUCT_LIMIT);
+    const productDataList = [];
+    productList.forEach(x => {
+      productDataList.push({
+        id: x.id,
+        name: x.name,
+        price: x.price,
+        category: x.category,
+        eventType: x.events[x.events.length-1].eventType,
+        isEvent: x.isEvent,
+        viewCnt: x.viewCnt,
+        likeCnt: x.likeCnt,
+        imageUrl: x.imageUrl,
+      })
+    });
     
     return {
       pageSize: pageSize,
       currentPage: page,
-      list: productList
+      list: productDataList
     };
   }
 
