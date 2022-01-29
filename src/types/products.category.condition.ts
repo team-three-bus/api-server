@@ -1,4 +1,5 @@
 export type InqueryCondition = {
+  CATEGORY: string[],
   BRAND: string[]
   ORDER: 'lowPrice' | 'highPrice' | 'popularity' | 'viewCnt';
   event: string[]

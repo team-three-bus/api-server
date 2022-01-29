@@ -20,7 +20,7 @@ export class ProductsService {
   }
 
   public async inCategoryProduct (
-    category: string, 
+    category: string[], 
     page: number,
     brand: string[],
     order: string,

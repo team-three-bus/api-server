@@ -34,7 +34,7 @@ export class ProductsDao {
   }
 
   public async getCategoryProduct(
-    category: string, 
+    category: string[], 
     page: number,
     brand: string[],
     orderKey: string,
@@ -49,7 +49,7 @@ export class ProductsDao {
         'events.productId = product.id',
       )
       .where({
-        category: category,
+        category: In(category),
         isEvent: true,
         brand: In(brand),
         id: In(eventIdList)
