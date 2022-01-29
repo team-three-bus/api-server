@@ -17,11 +17,19 @@ export class ProductsDao {
     return this.productsRepository.count();
   }
 
-  public getProduct(id: number): Promise<any> {
+  public async getProduct(id: number): Promise<ProductsEntity> {
     return this.productsRepository.findOne({
       where: {
         id: id
       }
+    });
+  }
+  
+  public async upViewCnt(id: number, viewCnt: number) {
+    this.productsRepository.update({
+      id: id
+    }, {
+      viewCnt: viewCnt
     });
   }
 

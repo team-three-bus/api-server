@@ -14,7 +14,8 @@ export class ProductsService {
 
   public async viewProductId (id: number): Promise<any> {
     const product = await this.productsDao.getProduct(id);
-
+    await this.productsDao.upViewCnt(id, product.viewCnt + 1);
+    product.viewCnt = product.viewCnt + 1;
     return product;
   }
 

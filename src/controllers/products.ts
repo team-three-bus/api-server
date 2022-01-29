@@ -6,13 +6,13 @@ import { InqueryCondition } from '../types/products.category.condition';
 export class ProductsController {
   public constructor(private readonly productsService: ProductsService) {}
 
-  @Get('/test')
-  public async getProdcut(): Promise<any> {
-    const product = await this.productsService.viewProductId(1);
+  @Get('/')
+  public async getProduct(@Query('id') id) {
+    const product = await this.productsService.viewProductId(id);
 
     return {
       product: product
-    };
+    }
   }
 
   @Get('/category')
