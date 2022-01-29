@@ -43,6 +43,7 @@ export class ProductsService {
       productDataList.push({
         id: x.id,
         name: x.name,
+        brand: x.brand,
         price: x.price,
         category: x.category,
         eventType: x.events[x.events.length-1].eventType,
