@@ -3,9 +3,11 @@ import {
   PrimaryGeneratedColumn,
   Column,
   Unique,
+  OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { LikeEntity } from './like';
 
 @Entity('users')
 export class UsersEntity {
@@ -27,6 +29,8 @@ export class UsersEntity {
   @Column({nullable: true})
   ageRange: string;
 
+  @OneToMany(type => LikeEntity, like => like.userId)
+  likes: LikeEntity[];
   // @Column()
   // status: string;
 

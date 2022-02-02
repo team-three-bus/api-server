@@ -1,10 +1,16 @@
-import { Controller, Get, Post, Body, Headers, Res, HttpStatus, Query} from '@nestjs/common';
+import { Controller, Get, Post, Body, Headers, Res, HttpStatus, Query, Delete} from '@nestjs/common';
 import { ProductsService } from '../services/products';
+import { UsersService } from '../services/users';
 import { InqueryCondition } from '../types/products.category.condition';
+import { decodeJWT } from '../utils/jwt';
+import { Response } from 'express';
 
 @Controller('products')
 export class ProductsController {
-  public constructor(private readonly productsService: ProductsService) {}
+  public constructor(
+    private readonly productsService: ProductsService,
+    private readonly usersService: UsersService
+  ) {}
 
   @Get('/')
   public async getProduct(@Query('id') id) {
@@ -36,4 +42,56 @@ export class ProductsController {
 
     return await this.productsService.inCategoryProduct(categoryCondition, pageNum, brandCondition, orderCondition, eventCondition);
   }
+
+  @Post('/like')
+  public async likeProduct(
+    @Headers() headers, 
+    @Body() likeData,
+    @Res() res: Response
+  ) {
+    // TODO middleware 분리 필요
+    if (!headers.authorization) {
+      res.status(401).json({message: "토큰을 첨부해주세요."});
+    }
+    const userTokenPayload = decodeJWT(headers.authorization);  
+    if (!userTokenPayload) {
+      res.status(401).json({message: "재 로그인이 필요합니다."});
+    }
+    const user = await this.usersService.getUser(userTokenPayload.socialId);
+    const isLike = await this.productsService.likeProduct(likeData.productId, user);
+    if (isLike === 'NOT') {
+      res.status(400).json({message: "없는 상품입니다."});
+    }
+    res.json({
+      message: "찜 완료되었습니다."
+    });
+  }
+
+  @Delete('/like')
+  public async unlikeProduct(
+    @Headers() headers, 
+    @Body() likeData,
+    @Res() res: Response
+  ) {
+    if (!headers.authorization) {
+      res.status(401).json({message: "토큰을 첨부해주세요."});
+    }
+    const userTokenPayload = decodeJWT(headers.authorization);
+    
+    if (!userTokenPayload) {
+      res.status(401).json({message: "재 로그인이 필요합니다."});
+    }
+    const user = await this.usersService.getUser(userTokenPayload.socialId);
+    const deleteLike = await this.productsService.unLikeProduct(
+      likeData.productId, user.id
+    );
+
+    if (deleteLike === 'NOT') {
+      res.status(400).json({message: "없는 상품입니다."});
+    }
+    res.json({
+      message: "찜 삭제 되었습니다."
+    });
+  }
+
 }

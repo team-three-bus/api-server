@@ -17,6 +17,22 @@ export class ProductsDao {
     return this.productsRepository.count();
   }
 
+  public async getOnlyProductData(id: number) {
+    return this.productsRepository.findOne({
+      where: {
+        id: id
+      }
+    });
+  }
+
+  public async updateProductLikeCnt(id: number, likeCnt: number) {
+    await this.productsRepository.update({
+      id: id
+    }, {
+      likeCnt: likeCnt
+    });
+  }
+
   public async getProduct(id: number): Promise<ProductsEntity> {
     return await this.productsRepository.createQueryBuilder('product')
       .leftJoinAndMapMany(
