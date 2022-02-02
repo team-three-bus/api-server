@@ -8,6 +8,7 @@ import { ProductsModule } from './modules/products';
 import { ProductAttrModule } from './modules/productAttr';
 import { EventsModule } from './modules/events';
 import { UsersModule } from './modules/users';
+import { LikeModule } from './modules/like';
 
 
 @Module({
@@ -30,7 +31,8 @@ import { UsersModule } from './modules/users';
     ProductsModule,
     ProductAttrModule,
     EventsModule,
-    UsersModule
+    UsersModule,
+    LikeModule
   ],
   controllers: [AppController],
   providers: [AppService],

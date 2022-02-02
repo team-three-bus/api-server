@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ProductsDao } from '../dao/products';
 import { EventsDao } from '../dao/events';
+import { LikeDao } from '../dao/like';
+import { UsersEntity } from '../entitys/users';
 import { OrderType } from '../types/products.category.condition';
 
 const PRODUCT_LIMIT = 10;
@@ -9,7 +11,8 @@ const PRODUCT_LIMIT = 10;
 export class ProductsService {
   public constructor(
     private productsDao: ProductsDao,
-    private eventsDao: EventsDao
+    private eventsDao: EventsDao,
+    private likeDao: LikeDao
   ) {}
 
   public async viewProductId (id: number): Promise<any> {
@@ -59,6 +62,35 @@ export class ProductsService {
       currentPage: page,
       list: productDataList
     };
+  }
+
+  public async likeProduct(productId: number, user: UsersEntity) {
+    // product 있는지 조회 
+    const product = await this.productsDao.getOnlyProductData(productId);
+    if (!product) {
+      return "NOT";
+    }
+    await Promise.all([
+      this.likeDao.likeProduct(productId, user),
+      this.productsDao.updateProductLikeCnt(product.id, product.likeCnt+1)
+    ]);
+
+    return "SUCCESS";
+  }
+
+  public async unLikeProduct(productId: number, userId: number) {
+    // product 있는지 조회 
+    const product = await this.productsDao.getOnlyProductData(productId);
+    if (!product) {
+      return "NOT";
+    }
+    const likeCnt = (product.likeCnt === 0) ? 0 : product.likeCnt - 1;
+    
+    await Promise.all([
+      this.likeDao.unLikeProduct(productId, userId),
+      this.productsDao.updateProductLikeCnt(product.id, likeCnt)
+    ]);
+    return "SUCCESS";
   }
 
   public orderCondition (order: string): OrderType {
