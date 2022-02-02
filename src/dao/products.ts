@@ -46,6 +46,14 @@ export class ProductsDao {
       })
       .getOne();
   }
+
+  public async getProducts(id: number[]) {
+    return await this.productsRepository.find({
+      where: {
+        id: In(id)
+      }
+    })
+  }
   
   public async upViewCnt(id: number, viewCnt: number) {
     this.productsRepository.update({
