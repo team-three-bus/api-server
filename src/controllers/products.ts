@@ -28,7 +28,7 @@ export class ProductsController {
     @Res() res: Response
   ) {
     const pageNum = (page) ? page : 1;
-    if (pageNum > 8) {
+    if (pageNum > 6) {
       return res.status(400).json({
         page: page,
         list: []

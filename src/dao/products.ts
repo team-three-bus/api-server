@@ -5,7 +5,7 @@ import { ProductsEntity } from '../entitys/products';
 import { EventsEntity } from '../entitys/events';
 
 const PRODUCT_LIMIT = 10;
-const POPULAR_PRODUCT_LIMIT = 4;
+const POPULAR_PRODUCT_LIMIT = 5;
 
 @Injectable()
 export class ProductsDao {
@@ -66,8 +66,7 @@ export class ProductsDao {
 
   public async getPopularProduct (
     category: string | undefined,
-    page: number,
-    limit: number
+    page: number
   ) {
     if (!category) {
       return await this.productsRepository.find({
@@ -77,7 +76,7 @@ export class ProductsDao {
         order: {
           viewCnt: "DESC"
         },
-        take: limit,
+        take: POPULAR_PRODUCT_LIMIT,
         skip: POPULAR_PRODUCT_LIMIT * (page -1)
       });
     }
@@ -89,7 +88,7 @@ export class ProductsDao {
       order: {
         viewCnt: "DESC"
       },
-      take: limit,
+      take: POPULAR_PRODUCT_LIMIT,
       skip: POPULAR_PRODUCT_LIMIT * (page -1)
     });
   }
