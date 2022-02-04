@@ -21,6 +21,27 @@ export class ProductsController {
     }
   }
 
+  @Get('/main/popular')
+  public async getPopularProductList(
+    @Query('page') page,
+    @Query('category') category,
+    @Res() res: Response
+  ) {
+    const pageNum = (page) ? page : 1;
+    if (pageNum > 8) {
+      return res.status(400).json({
+        page: page,
+        list: []
+      });
+    }
+    const productList = await this.productsService.popularProductList(Number(page), category);
+
+    return res.json({
+      page: page,
+      list: productList
+    });
+  };
+
   @Get('/category')
   public async getCategory(
     @Query('category') category, 
