@@ -65,10 +65,22 @@ export class ProductsDao {
   }
 
   public async getPopularProduct (
-    category: string,
+    category: string | undefined,
     page: number,
     limit: number
   ) {
+    if (!category) {
+      return await this.productsRepository.find({
+        where: {
+          isEvent: true
+        },
+        order: {
+          viewCnt: "DESC"
+        },
+        take: limit,
+        skip: POPULAR_PRODUCT_LIMIT * (page -1)
+      });
+    }
     return await this.productsRepository.find({
       where: {
         category: category,

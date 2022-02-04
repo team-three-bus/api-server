@@ -24,7 +24,7 @@ export class ProductsService {
 
   public async popularProductList (
     page: number,
-    category: string
+    category: string | undefined
   ) {
     const limitCnt = (page === 8) ? 2 : 4;
     return await this.productsDao.getPopularProduct(category, page, limitCnt);
