@@ -22,6 +22,13 @@ export class ProductsService {
     return product;
   }
 
+  public async popularProductList (
+    page: number,
+    category: string | undefined
+  ) {
+    return await this.productsDao.getPopularProduct(category, page);
+  };
+
   public async inCategoryProduct (
     category: string[], 
     page: number,
