@@ -57,7 +57,7 @@ export class ProductsController {
       ['간편식사', '빵/과자류', '생수/과채/기타음료', '탄산음료', '유제품/커피 음료',
       '아이스크림', '생활용품', '기타'];
     // default: 4개 브랜드 적용될 수 있도록 구현
-    const brandCondition: InqueryCondition['BRAND'] = (brand) ? brand.split(',') : ['GS', 'CU'];
+    const brandCondition: InqueryCondition['BRAND'] = (brand) ? brand.split(',') : ['GS', 'CU', '7-ELEVEN', 'emart24'];
     const orderCondition: InqueryCondition['ORDER'] = (order) ? order : 'lowPrice';
     const eventCondition: InqueryCondition['event'] = (event) ? event.split(',') : ['1+1', '2+1'];
 
