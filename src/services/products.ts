@@ -38,7 +38,7 @@ export class ProductsService {
   ): Promise<any> {
     // @TODO 현재 개발을 위헤 year, month를 부여하였지만, 변경 필요 
     const year = "2022";
-    const month = "1";
+    const month = "2";
     const goingEventList = await this.eventsDao.getGoingEventIdList(year, month, event);
     
     const eventIdList = goingEventList.map((x) => x.productId);
