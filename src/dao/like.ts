@@ -31,7 +31,10 @@ export class LikeDao {
       where: {
         userId: userId
       },
-      select: ['productId']
+      select: ['productId'],
+      order: {
+        createdAt: "DESC"
+      }
     });
   }
 }
