@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { ProductsEntity } from '../entitys/products';
 import { EventsEntity } from '../entitys/events';
+import { isIn } from 'class-validator';
 
 const PRODUCT_LIMIT = 10;
 const POPULAR_PRODUCT_LIMIT = 5;
@@ -54,6 +55,28 @@ export class ProductsDao {
         id: In(id)
       }
     })
+  }
+
+  public async getLikeProducts(
+    id: number[],
+    brand: string[],
+    category: string[],
+    isEvent: Boolean | null
+  ) {
+    const queryBuilder = this.productsRepository.createQueryBuilder('product');
+    queryBuilder.where({
+      id: In(id),
+      brand: In(brand),
+      category: In(category)
+    });
+    if (!isEvent) {
+      queryBuilder.andWhere({
+        isEvent: isEvent
+      });
+    }
+
+    return await queryBuilder.getMany();
+
   }
   
   public async upViewCnt(id: number, viewCnt: number) {
