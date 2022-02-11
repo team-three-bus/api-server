@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UsersDao } from '../dao/users';
 import { AddUsersDto } from '../dto/users';
-import { createJWT } from '../utils/jwt';
+import { createJWT, decodeJWT } from '../utils/jwt';
 import axios from "axios";
 
 
@@ -47,5 +47,18 @@ export class UsersService {
 
   public async joinUser(user: AddUsersDto) {
     await this.usersDao.addUser(user);
+  }
+
+  public async isUser(authorization?: string) {
+    if (!authorization) {
+      return;
+    }
+    const userTokenPayload = decodeJWT(authorization);
+
+    if (!userTokenPayload) {
+      return;
+    }
+
+    return await this.getUser(userTokenPayload.socialId);
   }
 }

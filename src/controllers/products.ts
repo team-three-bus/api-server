@@ -23,18 +23,20 @@ export class ProductsController {
 
   @Get('/main/popular')
   public async getPopularProductList(
+    @Headers() headers, 
     @Query('page') page,
     @Query('category') category,
     @Res() res: Response
   ) {
+    const isUser = await this.usersService.isUser(headers?.authorization);
     const pageNum = (page) ? page : 1;
     if (pageNum > 6) {
       return res.status(400).json({
         page: page,
-        list: []
+        list: [],
       });
     }
-    const productList = await this.productsService.popularProductList(Number(page), category);
+    const productList = await this.productsService.popularProductList(Number(page), category, isUser.id);
 
     return res.json({
       page: page,
@@ -44,12 +46,14 @@ export class ProductsController {
 
   @Get('/category')
   public async getCategory(
+    @Headers() headers, 
     @Query('category') category, 
     @Query('page') page,
     @Query('brand') brand,
     @Query('order') order,
     @Query('event') event,
   ): Promise<any> {
+    const isUser = await this.usersService.isUser(headers?.authorization);
     const pageNum = (page) ? page : 1;
     const categoryCondition: InqueryCondition['CATEGORY'] = 
       (category) ? 
@@ -61,7 +65,14 @@ export class ProductsController {
     const orderCondition: InqueryCondition['ORDER'] = (order) ? order : 'lowPrice';
     const eventCondition: InqueryCondition['event'] = (event) ? event.split(',') : ['1+1', '2+1'];
 
-    return await this.productsService.inCategoryProduct(categoryCondition, pageNum, brandCondition, orderCondition, eventCondition);
+    return await this.productsService.inCategoryProduct(
+      categoryCondition, 
+      pageNum, 
+      brandCondition, 
+      orderCondition, 
+      eventCondition,
+      isUser?.id
+    );
   }
 
   @Post('/like')
