@@ -9,7 +9,8 @@ import { ProductAttrModule } from './modules/productAttr';
 import { EventsModule } from './modules/events';
 import { UsersModule } from './modules/users';
 import { LikeModule } from './modules/like';
-
+import { ElasticModule } from "./modules/search";
+import { ElasticsearchModule } from "@nestjs/elasticsearch";
 
 @Module({
   imports: [
@@ -32,7 +33,8 @@ import { LikeModule } from './modules/like';
     ProductAttrModule,
     EventsModule,
     UsersModule,
-    LikeModule
+    LikeModule,
+    ElasticModule
   ],
   controllers: [AppController],
   providers: [AppService],
