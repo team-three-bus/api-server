@@ -12,9 +12,11 @@ export default class PostsController {
   }
 
   @Get("/")
-  async getPosts(@Query("search") text: string, @Query("pageSize") pageSize: integer, @Query("currentPage") currentPage: integer, @Res() res: Response) {
+  async getPosts(@Query("search") text: string, @Query("pageSize") pageSize: integer, @Query("currentPage") currentPage: integer,
+                 @Query("brand") brand: string,@Query("eventtype") eventtype: string,@Query("category") category: string,
+                 @Query("sort") sort: string, @Res() res: Response) {
     if (text) {
-      const searchResult = await this.postsService.search(text, pageSize, currentPage);
+      const searchResult = await this.postsService.search(text, pageSize, currentPage,brand,eventtype,category,sort);
       if (searchResult !== "") {
         return res.status(200).json(searchResult);
       } else {

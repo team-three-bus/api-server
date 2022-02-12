@@ -1,5 +1,3 @@
-import { integer } from "@elastic/elasticsearch/api/types";
-
 export interface PostSearchBody {
   eventtype:string,
   name: string,
