@@ -13,7 +13,7 @@ export default class PostsSearchService {
   ) {
   }
 
-  async search(text: string, pageSize: integer, currentPage: integer, brand?: string, eventtype?: string, category?: string,sort?:string) {
+  async search(text: string, pageSize: integer, currentPage: integer, brand?: string, eventtype?: string, category?: string,sort?:string,isevent?:integer) {
 
     let inputObj = {
       index: this.index,

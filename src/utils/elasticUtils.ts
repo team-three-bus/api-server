@@ -1,4 +1,4 @@
-const mustTermsQuery = (text: string, brand?: string, eventtype?: string, category?: string) => {
+const mustTermsQuery = (text: string, brand?: string, eventtype?: string, category?: string,isevent?:string) => {
   const must = [];
 
   text ? must.push({
@@ -25,6 +25,16 @@ const mustTermsQuery = (text: string, brand?: string, eventtype?: string, catego
       category: category.split(",")
     }
   }) : "";
+
+  isevent ? must.push({
+    match: {
+      isevent: isevent
+    }
+  }) : must.push({
+    match: {
+      isevent: 1
+    }
+  });
 
   return must;
 };
