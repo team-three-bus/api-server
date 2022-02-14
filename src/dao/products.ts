@@ -6,7 +6,7 @@ import { EventsEntity } from '../entitys/events';
 import { isIn } from 'class-validator';
 
 const PRODUCT_LIMIT = 10;
-const POPULAR_PRODUCT_LIMIT = 5;
+const POPULAR_PRODUCT_LIMIT = 6;
 
 @Injectable()
 export class ProductsDao {
@@ -92,28 +92,40 @@ export class ProductsDao {
     page: number
   ) {
     if (!category) {
-      return await this.productsRepository.find({
-        where: {
+      return await this.productsRepository.createQueryBuilder('product')
+        .leftJoinAndMapMany(
+          'product.events',
+          EventsEntity,
+          'events',
+          'events.productId = product.id',
+        )
+        .where({
           isEvent: true
-        },
-        order: {
-          viewCnt: "DESC"
-        },
-        take: POPULAR_PRODUCT_LIMIT,
-        skip: POPULAR_PRODUCT_LIMIT * (page -1)
-      });
+        })
+        .take(POPULAR_PRODUCT_LIMIT)
+        .skip((page - 1) * POPULAR_PRODUCT_LIMIT)
+        .orderBy({
+          'product.viewCnt': 'DESC'
+        })
+        .getMany();
     }
-    return await this.productsRepository.find({
-      where: {
-        category: category,
-        isEvent: true
-      },
-      order: {
-        viewCnt: "DESC"
-      },
-      take: POPULAR_PRODUCT_LIMIT,
-      skip: POPULAR_PRODUCT_LIMIT * (page -1)
-    });
+    return await this.productsRepository.createQueryBuilder('product')
+      .leftJoinAndMapMany(
+        'product.events',
+        EventsEntity,
+        'events',
+        'events.productId = product.id',
+      )
+      .where({
+        isEvent: true,
+        category: category
+      })
+      .take(POPULAR_PRODUCT_LIMIT)
+      .skip((page - 1) * POPULAR_PRODUCT_LIMIT)
+      .orderBy({
+        'product.viewCnt': 'DESC'
+      })
+      .getMany();
   }
 
   public async getCategoryProduct(
