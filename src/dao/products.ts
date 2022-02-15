@@ -104,9 +104,6 @@ export class ProductsDao {
         })
         .take(POPULAR_PRODUCT_LIMIT)
         .skip((page - 1) * POPULAR_PRODUCT_LIMIT)
-        .orderBy({
-          'product.viewCnt': 'DESC'
-        })
         .getMany();
     }
     return await this.productsRepository.createQueryBuilder('product')
@@ -122,9 +119,6 @@ export class ProductsDao {
       })
       .take(POPULAR_PRODUCT_LIMIT)
       .skip((page - 1) * POPULAR_PRODUCT_LIMIT)
-      .orderBy({
-        'product.viewCnt': 'DESC'
-      })
       .getMany();
   }
 

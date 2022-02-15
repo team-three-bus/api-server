@@ -50,6 +50,10 @@ export class ProductsEntity {
   @OneToMany(type => EventsEntity, events => events.products)
   events: EventsEntity[];
 
+  @Index()
+  @Column()
+  lastEventType: string;
+
   @Column()
   @CreateDateColumn()
   createdAt: Date;
