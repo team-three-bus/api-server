@@ -40,8 +40,7 @@ export class ProductsService {
         isLike = true;
       }
       x["isLike"] = isLike;
-      x["eventType"] = x.events[x.events.length-1].eventType;
-      x["events"] = [];
+      x["eventType"] = x.lastEventType
     });
     
     return productList;
@@ -50,17 +49,14 @@ export class ProductsService {
   public async inCategoryProduct (
     category: string[], 
     page: number,
+    getPageSize: number,
     brand: string[],
     order: string,
     event: string[],
     userId?: number
   ): Promise<any> {
     // @TODO 현재 개발을 위헤 year, month를 부여하였지만, 변경 필요 
-    const year = "2022";
-    const month = "2";
-    const goingEventList = await this.eventsDao.getGoingEventIdList(year, month, event);
     
-    const eventIdList = goingEventList.map((x) => x.productId);
     let likeProductList: number[] = [];
     if (userId) {
       const likeProducts = await this.likeDao.likeListProduct(userId);
@@ -68,7 +64,7 @@ export class ProductsService {
     }
     const orderOrderBy = this.orderCondition(order);
     const [productList, count] = await this.productsDao.getCategoryProduct(
-      category, page, brand, orderOrderBy.key, orderOrderBy.condition, eventIdList
+      category, page, getPageSize, brand, event, orderOrderBy.key, orderOrderBy.condition
       );
     const pageSize = Math.ceil(count / PRODUCT_LIMIT);
     const productDataList = [];
@@ -83,7 +79,7 @@ export class ProductsService {
         brand: x.brand,
         price: x.price,
         category: x.category,
-        eventType: x.events[x.events.length-1].eventType,
+        eventType: x.lastEventType,
         isEvent: x.isEvent,
         viewCnt: x.viewCnt,
         likeCnt: x.likeCnt,
