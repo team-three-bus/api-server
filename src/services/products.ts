@@ -40,8 +40,7 @@ export class ProductsService {
         isLike = true;
       }
       x["isLike"] = isLike;
-      x["eventType"] = x.events[x.events.length-1].eventType;
-      x["events"] = [];
+      x["eventType"] = x.lastEventType
     });
     
     return productList;

@@ -93,12 +93,6 @@ export class ProductsDao {
   ) {
     if (!category) {
       return await this.productsRepository.createQueryBuilder('product')
-        .leftJoinAndMapMany(
-          'product.events',
-          EventsEntity,
-          'events',
-          'events.productId = product.id',
-        )
         .where({
           isEvent: true
         })
@@ -107,12 +101,6 @@ export class ProductsDao {
         .getMany();
     }
     return await this.productsRepository.createQueryBuilder('product')
-      .leftJoinAndMapMany(
-        'product.events',
-        EventsEntity,
-        'events',
-        'events.productId = product.id',
-      )
       .where({
         isEvent: true,
         category: category
