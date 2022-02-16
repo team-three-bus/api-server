@@ -13,8 +13,7 @@ export default class PostsSearchService {
   ) {
   }
 
-  async search(text: string, pageSize: integer, currentPage: integer, brand?: string, eventtype?: string, category?: string,sort?:string,isevent?:integer) {
-
+  async search(text: string, pageSize: integer, currentPage: integer, brand?: string, eventtype?: string, category?: string,sort?:string) {
     let inputObj = {
       index: this.index,
       body: {
@@ -28,7 +27,6 @@ export default class PostsSearchService {
         "sort": []
       }
     };
-
     const mustQuery = mustTermsQuery(text,brand,eventtype,category);
     const sortingQuery = sortQuery(sort);
 
