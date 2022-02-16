@@ -125,25 +125,20 @@ export class ProductsDao {
   public async getCategoryProduct(
     category: string[], 
     page: number,
+    getPageSize: number,
     brand: string[],
+    event: string[],
     orderKey: string,
     orderCondition: 'ASC' | 'DESC',
-    eventIdList: string[]
   ): Promise<[ProductsEntity[], number]> {
     const [list, count] = await this.productsRepository.createQueryBuilder('product')
-      .leftJoinAndMapMany(
-        'product.events',
-        EventsEntity,
-        'events',
-        'events.productId = product.id',
-      )
       .where({
         category: In(category),
         isEvent: true,
         brand: In(brand),
-        id: In(eventIdList)
+        lastEventType: In(event)
       })
-      .take(PRODUCT_LIMIT)
+      .take(PRODUCT_LIMIT * getPageSize)
       .skip((page-1) * PRODUCT_LIMIT)
       .orderBy(orderKey, orderCondition)
       .getManyAndCount();
