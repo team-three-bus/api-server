@@ -31,7 +31,7 @@ const mustTermsQuery = (text: string, brand?: string, eventtypeValue?: string, c
     }
   }) : "";
 
-  eventtypeValue ? must.push({
+  eventtypeArr ? must.push({
     terms: {
       "eventtype": eventtypeArr
     }
