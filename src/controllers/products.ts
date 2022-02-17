@@ -36,7 +36,7 @@ export class ProductsController {
         list: [],
       });
     }
-    const productList = await this.productsService.popularProductList(Number(pageNum), category, isUser.id);
+    const productList = await this.productsService.popularProductList(Number(pageNum), category, isUser?.id);
 
     return res.json({
       page: page,
