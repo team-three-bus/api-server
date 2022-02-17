@@ -4,17 +4,19 @@ moment.tz.setDefault("Asia/Seoul");
 let month = moment().format("MM");
 month = month.slice(0,1) === "0" ? month.slice(1,2) : month;
 
-const mustTermsQuery = (text: string, brand?: string, eventtype?: string, category?: string, isevent?: string) => {
+const mustTermsQuery = (text: string, brand?: string, eventtype?: string, category?: string) => {
   const must = [];
-  let eventtypeArr;
+  let eventtypeArr:any;
   if(eventtype && eventtype.split(",").length === 2) {
     eventtypeArr = eventtype.split(",");
     for(let val in eventtypeArr) {
       eventtypeArr[val] = eventtypeArr[val].replace(" ", "+");
     }
-  } else if(eventtype && eventtype.split(",").length === 1){
-    eventtypeArr = eventtype.split(",")
-    eventtypeArr = eventtypeArr[0].replace(" ", "+");
+  } else if(eventtype.length === 3){
+    let tempArray = [];
+    const fixValue = eventtype.replace(" ", "+");
+    tempArray.push(fixValue)
+    eventtypeArr = tempArray;
   }
   text ? must.push({
     "simple_query_string": {
@@ -41,11 +43,7 @@ const mustTermsQuery = (text: string, brand?: string, eventtype?: string, catego
     }
   }) : "";
 
-  isevent ? must.push({
-    match: {
-      isevent: isevent
-    }
-  }) : must.push({
+  must.push({
     match: {
       isevent: 1
     }
