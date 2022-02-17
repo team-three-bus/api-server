@@ -16,7 +16,7 @@ export default class PostsController {
                  @Query("brand") brand: string,@Query("eventtype") eventtype: string,@Query("category") category: string,
                  @Query("sort") sort: string, @Query("isevent") isevent: integer, @Res() res: Response) {
     if (text) {
-      const searchResult = await this.postsService.search(text, pageSize, currentPage,brand,eventtype,category,sort,isevent);
+      const searchResult = await this.postsService.search(text, pageSize, currentPage,brand,eventtype,category,sort);
       if (searchResult !== "") {
         return res.status(200).json(searchResult);
       } else {
