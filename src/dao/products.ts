@@ -69,7 +69,7 @@ export class ProductsDao {
       brand: In(brand),
       category: In(category)
     });
-    if (!isEvent) {
+    if (isEvent) {
       queryBuilder.andWhere({
         isEvent: isEvent
       });
