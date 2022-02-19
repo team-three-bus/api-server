@@ -48,7 +48,7 @@ export class ProductsController {
   public async getCategory(
     @Headers() headers, 
     @Query('category') category, 
-    @Query('pagesize') pagesize,
+    @Query('pageSize') pageSize,
     @Query('currentPage') currentPage,
     @Query('brand') brand,
     @Query('order') order,
@@ -56,7 +56,7 @@ export class ProductsController {
   ): Promise<any> {
     const isUser = await this.usersService.isUser(headers?.authorization);
     const pageNum = (currentPage) ? currentPage : 1;
-    const getPageSize = (pagesize) ? pagesize : 1;
+    const getPageSize = (pageSize) ? pageSize : 1;
     const categoryCondition: InqueryCondition['CATEGORY'] = 
       (category) ? 
       category.split(',') : 

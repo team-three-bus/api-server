@@ -89,7 +89,6 @@ export class ProductsService {
     });
     
     return {
-      pageSize: pageSize,
       productCnt: count,
       currentPage: page,
       list: productDataList
