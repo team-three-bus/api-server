@@ -19,6 +19,15 @@ export class LikeDao {
     })
   }
 
+  public async checkLikeProduct(productId: number, userId?: number) {
+    return await this.likeRepository.findOne({
+      where: {
+        productId: productId,
+        userId: userId
+      }
+    });
+  }
+
   public async unLikeProduct(productId: number, userId: number) {
     await this.likeRepository.delete({
       productId: productId,

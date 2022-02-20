@@ -15,10 +15,18 @@ export class ProductsService {
     private likeDao: LikeDao
   ) {}
 
-  public async viewProductId (id: number): Promise<any> {
+  public async viewProductId (id: number, userId?: number): Promise<any> {
     const product = await this.productsDao.getProduct(id);
     await this.productsDao.upViewCnt(id, product.viewCnt + 1);
     product.viewCnt = product.viewCnt + 1;
+    let isLike = false;
+    if (userId) {
+
+      if (await this.likeDao.checkLikeProduct(product.id, userId)) {
+        isLike = true;
+      }
+    }
+    product['isLike'] = isLike;
     return product;
   }
 

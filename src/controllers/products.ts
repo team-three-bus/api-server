@@ -13,8 +13,10 @@ export class ProductsController {
   ) {}
 
   @Get('/')
-  public async getProduct(@Query('id') id) {
-    const product = await this.productsService.viewProductId(id);
+  public async getProduct(@Headers() headers, @Query('id') id) {
+    const isUser = await this.usersService.isUser(headers?.authorization);
+
+    const product = await this.productsService.viewProductId(id, isUser?.id);
 
     return {
       product: product
