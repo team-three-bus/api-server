@@ -1,5 +1,3 @@
-import { Request } from 'request-ip';
-
 export interface searchParams {
   text?:string,
   brand?: string,
@@ -9,7 +7,6 @@ export interface searchParams {
 }
 
 export interface loggingParams {
-  req: Request,
   id: number,
   name: string,
   price?: number,
