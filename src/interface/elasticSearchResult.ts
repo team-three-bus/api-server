@@ -8,3 +8,12 @@ export interface ElasticSearchResult {
     }>;
   };
 }
+
+export interface ElasticPutDocumentResult {
+  hits: {
+    total: number;
+    hits: Array<{
+      _source: PostSearchBody;
+    }>;
+  };
+}
