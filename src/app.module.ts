@@ -10,7 +10,8 @@ import { EventsModule } from './modules/events';
 import { UsersModule } from './modules/users';
 import { LikeModule } from './modules/like';
 import { ElasticModule } from "./modules/search";
-import { ElasticsearchModule } from "@nestjs/elasticsearch";
+import { LoggingModule } from './modules/logging';
+// import { EsConfigModule } from '../config/elasticsearch/config.module';
 
 @Module({
   imports: [
@@ -34,7 +35,9 @@ import { ElasticsearchModule } from "@nestjs/elasticsearch";
     EventsModule,
     UsersModule,
     LikeModule,
-    ElasticModule
+    ElasticModule,
+    LoggingModule,
+    // EsConfigModule
   ],
   controllers: [AppController],
   providers: [AppService],
