@@ -6,10 +6,14 @@ moment.tz.setDefault('Asia/Seoul');
 
 @Injectable()
 export default class LoggingService {
-
   constructor(private readonly elasticsearchService: ElasticsearchService) {}
 
-  async putDocument(userId: string, name: string, productId: number, price: number) {
+  async putDocument(
+    userId: number,
+    name: string,
+    productId: number,
+    price: number,
+  ) {
     const nowDate = moment().format('YYYYMMDD');
     const index = `logging-${nowDate}`;
     const clickDate = moment().format('YYYY-MM-DD HH:mm:ss');
