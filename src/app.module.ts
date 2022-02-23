@@ -9,9 +9,8 @@ import { ProductAttrModule } from './modules/productAttr';
 import { EventsModule } from './modules/events';
 import { UsersModule } from './modules/users';
 import { LikeModule } from './modules/like';
-import { ElasticModule } from "./modules/search";
-import { LoggingModule } from './modules/logging';
-// import { EsConfigModule } from '../config/elasticsearch/config.module';
+import { ElasticModule } from './modules/search';
+
 
 @Module({
   imports: [
@@ -36,8 +35,6 @@ import { LoggingModule } from './modules/logging';
     UsersModule,
     LikeModule,
     ElasticModule,
-    LoggingModule,
-    // EsConfigModule
   ],
   controllers: [AppController],
   providers: [AppService],

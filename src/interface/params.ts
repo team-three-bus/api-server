@@ -5,10 +5,3 @@ export interface searchParams {
   category?: string,
   sort?: string,
 }
-
-export interface loggingParams {
-  id: number,
-  name: string,
-  price?: number,
-  userId: string
-}
