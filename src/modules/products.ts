@@ -11,10 +11,16 @@ import { ProductsDao } from '../dao/products';
 import { EventsDao } from '../dao/events';
 import { LikeDao } from '../dao/like';
 import { UsersDao } from '../dao/users';
+import LoggingService from '../services/logging';
+import { ElasticsearchModule } from '@nestjs/elasticsearch';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ProductsEntity, EventsEntity, LikeEntity, UsersEntity])],
+  imports: [TypeOrmModule.forFeature([ProductsEntity, EventsEntity, LikeEntity, UsersEntity]),
+    ElasticsearchModule.register({
+    node: 'http://34.64.247.101:9200',
+  })],
   controllers: [ProductsController],
-  providers: [ProductsService, UsersService, ProductsDao, EventsDao, LikeDao, UsersDao]
+  providers: [ProductsService, UsersService, LoggingService, ProductsDao, EventsDao, LikeDao, UsersDao],
 })
-export class ProductsModule {}
+export class ProductsModule {
+}
