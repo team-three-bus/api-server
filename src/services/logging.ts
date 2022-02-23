@@ -3,21 +3,15 @@ import * as moment from 'moment';
 import 'moment-timezone';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
 moment.tz.setDefault('Asia/Seoul');
-const alias = 'logging';
 
 @Injectable()
 export default class LoggingService {
-  nowDate = moment().format('YYYYMMDD');
-  index = `logging-${this.nowDate}`;
 
   constructor(private readonly elasticsearchService: ElasticsearchService) {}
 
-  async putDocument(
-    userId: string,
-    name: string,
-    productId: number,
-    price: number,
-  ) {
+  async putDocument(userId: string, name: string, productId: number, price: number) {
+    const nowDate = moment().format('YYYYMMDD');
+    const index = `logging-${nowDate}`;
     const clickDate = moment().format('YYYY-MM-DD HH:mm:ss');
     const dataset = [
       {
