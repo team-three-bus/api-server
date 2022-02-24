@@ -92,12 +92,14 @@ export class ProductsDao {
     page: number
   ) {
     if (!category) {
+      console.log(POPULAR_PRODUCT_LIMIT, (page - 1) * POPULAR_PRODUCT_LIMIT);
       return await this.productsRepository.createQueryBuilder('product')
         .where({
           isEvent: true
         })
         .take(POPULAR_PRODUCT_LIMIT)
         .skip((page - 1) * POPULAR_PRODUCT_LIMIT)
+        .orderBy("viewCnt", "DESC")
         .getMany();
     }
     return await this.productsRepository.createQueryBuilder('product')
@@ -107,6 +109,7 @@ export class ProductsDao {
       })
       .take(POPULAR_PRODUCT_LIMIT)
       .skip((page - 1) * POPULAR_PRODUCT_LIMIT)
+      .orderBy("viewCnt", "DESC")
       .getMany();
   }
 
