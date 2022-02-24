@@ -145,12 +145,12 @@ export class ProductsService {
       };
     } else if (order === 'popularity') {
       return {
-        'key': 'product.likeCnt',
+        'key': 'product.viewCnt',
         'condition' : 'DESC'
       };
     } else {
       return {
-        'key': 'product.viewCnt',
+        'key': 'product.likeCnt',
         'condition' : 'DESC'
       };
     }
