@@ -21,7 +21,7 @@ const mustTermsQuery = (text: string, brand?: string, eventtypeValue?: string, c
   text ? must.push({
     "simple_query_string": {
       "query": text,
-      "fields": ["name.nori"]
+      "fields": ["name.nori^3","name.ngram"]
     }
   }) : "";
 
