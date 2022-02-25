@@ -4,17 +4,18 @@ moment.tz.setDefault("Asia/Seoul");
 let month = moment().format("MM");
 month = month.slice(0,1) === "0" ? month.slice(1,2) : month;
 
-const mustTermsQuery = (text: string, brand?: string, eventtypeValue?: string, category?: string) => {
+// @ TODO 날짜 관련 미들웨어로 뺴야함 너무 중복되서 사용
+const mustTermsQuery = (text: string, brand?: string, eventtype?: string, category?: string) => {
   const must = [];
   let eventtypeArr:any;
-  if(eventtypeValue && eventtypeValue.split(",").length === 2) {
-    eventtypeArr = eventtypeValue.split(",");
+  if(eventtype && eventtype.split(",").length === 2) {
+    eventtypeArr = eventtype.split(",");
     for(let val in eventtypeArr) {
       eventtypeArr[val] = eventtypeArr[val].replace(" ", "+");
     }
-  } else if(eventtypeValue.length === 3){
+  } else if(eventtype && eventtype.length === 3){
     let tempArray = [];
-    const fixValue = eventtypeValue.replace(" ", "+");
+    const fixValue = eventtype.replace(" ", "+");
     tempArray.push(fixValue)
     eventtypeArr = tempArray;
   }
@@ -76,21 +77,15 @@ const sortQuery = (inputSort: string) => {
         }
       });
       break;
-    case("likecnt"):
+    case("viewcnt"):
       sort.push({
-        "likecnt": {
-          "order": "desc"
-        }
+        "viewcnt": {
+          "order": "desc",
+        },
       });
       break;
     default:
-      sort.push({
-        "firstattr": {
-          "order": "desc"
-        }
-      });
   }
   return sort;
 };
-export { mustTermsQuery };
-export { sortQuery };
+export { mustTermsQuery, sortQuery };
