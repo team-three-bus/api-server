@@ -10,6 +10,7 @@ import { EventsModule } from './modules/events';
 import { UsersModule } from './modules/users';
 import { LikeModule } from './modules/like';
 import { ElasticModule } from './modules/search';
+import { RecommendModule } from './modules/recommend';
 
 
 @Module({
@@ -35,6 +36,7 @@ import { ElasticModule } from './modules/search';
     UsersModule,
     LikeModule,
     ElasticModule,
+    RecommendModule
   ],
   controllers: [AppController],
   providers: [AppService],
