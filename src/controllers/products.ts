@@ -40,7 +40,7 @@ export class ProductsController {
   ) {
     const isUser = await this.usersService.isUser(headers?.authorization);
     const pageNum = (page) ? page : 1;
-    if (pageNum > 5) {
+    if (pageNum > 3) {
       return res.status(400).json({
         page: page,
         list: [],
