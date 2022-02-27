@@ -17,7 +17,11 @@ import { ElasticsearchModule } from '@nestjs/elasticsearch';
 @Module({
   imports: [TypeOrmModule.forFeature([ProductsEntity, EventsEntity, LikeEntity, UsersEntity]),
     ElasticsearchModule.register({
-    node: 'http://34.64.247.101:9200',
+    node: 'http://34.64.247.101:9500',
+      auth: {
+        username: 'elastic',
+        password: 'threebus'
+      }
   })],
   controllers: [ProductsController],
   providers: [ProductsService, UsersService, LoggingService, ProductsDao, EventsDao, LikeDao, UsersDao],
