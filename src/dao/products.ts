@@ -6,7 +6,7 @@ import { EventsEntity } from '../entitys/events';
 import { isIn } from 'class-validator';
 
 const PRODUCT_LIMIT = 10;
-const POPULAR_PRODUCT_LIMIT = 6;
+const POPULAR_PRODUCT_LIMIT = 10;
 
 @Injectable()
 export class ProductsDao {
