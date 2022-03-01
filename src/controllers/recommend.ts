@@ -1,9 +1,6 @@
-import { Body, Controller, Get, Post, Query, Res } from '@nestjs/common';
+import { Controller, Get, Query, Res } from "@nestjs/common";
 import { Response } from "express";
-import PostsSearchService from "../services/search";
-import { integer } from "@elastic/elasticsearch/api/types";
-import RecommendService from '../services/recommend';
-import { getUserIdDto } from '../dto/userId';
+import RecommendService from "../services/recommend";
 
 
 @Controller("recommend")
@@ -14,8 +11,13 @@ export default class RecommendController {
   }
 
   @Get("/")
-  async getRecommendProduct(@Query("userId") userId, @Res() res: Response) {
-
-    let recommendProduct = this.recommendService.getRecommendProduct(userId);
+  async getRecommendProduct(@Query("userId") userId: number, @Query("size") size: number, @Res() res: Response) {
+    const recommendProduct = await this.recommendService.getRecommendProduct(userId, size);
+    if(recommendProduct) {
+      return res.status(200).json(recommendProduct);
+    } else {
+      const defaultProduct = await this.recommendService.defaultRecommendProduct();
+      return res.status(200).json(defaultProduct);;
+    }
   }
 }
