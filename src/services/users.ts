@@ -61,4 +61,8 @@ export class UsersService {
 
     return await this.getUser(userTokenPayload.socialId);
   }
+
+  public async updateUserName(socialId: string, name: string) {
+    await this.usersDao.updateUserName(socialId, name);
+  }
 }

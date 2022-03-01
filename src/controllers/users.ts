@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Headers, Res, HttpStatus} from '@nestjs/common';
+import { Controller, Get, Post, Body, Headers, Res, HttpStatus, Put} from '@nestjs/common';
 import { UsersService } from '../services/users';
 import { decodeJWT } from '../utils/jwt';
 import { Response } from 'express';
@@ -34,5 +34,21 @@ export class UsersController {
     res.status(200).json({
       nickname: user.nickname
     });
+  }
+
+  @Put('/myname')
+  public async updateMyName(@Headers() headers, @Res() res: Response, @Body() user): Promise<any> {
+    if (!headers.authorization) {
+      res.status(401).json({message: "토큰을 첨부해주세요."});
+    }
+    const userTokenPayload = decodeJWT(headers.authorization);
+    
+    if (!userTokenPayload) {
+      res.status(401).json({message: "재 로그인이 필요합니다."});
+    }
+
+    await this.usersService.updateUserName(userTokenPayload.socialId, user.nickname);
+  
+    res.status(200).json({});
   }
 }
