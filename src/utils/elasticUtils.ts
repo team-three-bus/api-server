@@ -1,9 +1,3 @@
-const moment = require("moment");
-require("moment-timezone");
-moment.tz.setDefault("Asia/Seoul");
-let month = moment().format("MM");
-month = month.slice(0,1) === "0" ? month.slice(1,2) : month;
-
 // @ TODO 날짜 관련 미들웨어로 뺴야함 너무 중복되서 사용
 const mustTermsQuery = (text: string, brand?: string, eventtype?: string, category?: string) => {
   const must = [];
@@ -49,13 +43,6 @@ const mustTermsQuery = (text: string, brand?: string, eventtype?: string, catego
       isevent: 1
     }
   });
-
-  must.push({
-    match: {
-      eventmonth: month
-    }
-  });
-
   return must;
 };
 
