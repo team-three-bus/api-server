@@ -24,4 +24,12 @@ export class UsersDao {
   public async addUser(addUser: AddUsersDto) {
     await this.userRepository.save(addUser);
   }
+
+  public async updateUserName(socialId: string, name: string) {
+    await this.userRepository.update({
+      socialId: socialId
+    }, {
+      nickname: name
+    });
+  }
 }
