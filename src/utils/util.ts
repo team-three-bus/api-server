@@ -1,3 +1,7 @@
+import * as moment from 'moment';
+import 'moment-timezone';
+moment.tz.setDefault('Asia/Seoul');
+
 export const isEmpty = (value: string | number | object): boolean => {
   if (value === null) {
     return true;
@@ -21,3 +25,8 @@ export const sortObj = (obj: Object): Object => {
     .sort(([,a],[,b]) => a + b)
     .reduce((r, [k, v]) => ({ ...r, [k]: v }), {});
 };
+
+export const nowYearMonthDay = moment().format('YYYYMMDD');
+export const clickDate = moment().format('YYYY-MM-DD HH:mm:ss');
+export const nowYear = moment().format('YYYY');
+export const nowMonth = moment().format('M');

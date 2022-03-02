@@ -1,12 +1,13 @@
 import { Injectable } from "@nestjs/common";
 import { ElasticsearchService } from "@nestjs/elasticsearch";
-import { ElasticAggregationsResult, ElasticSearchResult } from "../interface/elasticSearchResult";
-import { sortObj } from "../utils/util";
+import { ElasticAggregationsResult, ElasticSearchResult, ElasticUpdateResult } from "../interface/elasticSearchResult";
+import { nowMonth, nowYear, sortObj } from "../utils/util";
 
 @Injectable()
 export default class RecommendService {
   loggingIndex = "logging-*";
-  productIndex = "products-2022-2";
+  // productIndex = `products-${nowYear}-${nowMonth}`;
+  productIndex = `products-*`;
 
   constructor(
     private readonly elasticsearchService: ElasticsearchService
@@ -168,5 +169,20 @@ export default class RecommendService {
     }
     resultObj["list"] = recommendArr;
     return resultObj;
+  }
+
+  async updateViewCount(productId: number) {
+    const updateQuery = {
+      id: productId.toString(),
+      index: this.productIndex,
+      retry_on_conflict: 1,
+      body: {
+        "script" : {
+          "source": "ctx._source.viewcnt += 1",
+          "lang": "painless"
+        }
+      }
+    }
+    await this.elasticsearchService.update<ElasticUpdateResult>(updateQuery);
   }
 }
