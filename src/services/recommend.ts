@@ -6,8 +6,7 @@ import { nowMonth, nowYear, sortObj } from "../utils/util";
 @Injectable()
 export default class RecommendService {
   loggingIndex = "logging-*";
-  // productIndex = `products-${nowYear}-${nowMonth}`;
-  productIndex = `products-*`;
+  productIndex = `products-${nowYear}-${nowMonth}`;
 
   constructor(
     private readonly elasticsearchService: ElasticsearchService
@@ -173,16 +172,19 @@ export default class RecommendService {
 
   async updateViewCount(productId: number) {
     const updateQuery = {
-      id: productId.toString(),
       index: this.productIndex,
-      retry_on_conflict: 1,
       body: {
         "script" : {
           "source": "ctx._source.viewcnt += 1",
           "lang": "painless"
+        },
+        "query": {
+          "term": {
+            "id": productId
+          }
         }
       }
     }
-    await this.elasticsearchService.update<ElasticUpdateResult>(updateQuery);
+    const apiResponse = await this.elasticsearchService.updateByQuery<ElasticUpdateResult>(updateQuery);
   }
 }
