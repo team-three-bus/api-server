@@ -4,7 +4,11 @@ import { ElasticsearchModule } from '@nestjs/elasticsearch';
 
 @Module({
   imports: [ElasticsearchModule.register({
-    node: 'http://34.64.247.101:9200'
+    node: 'http://34.64.247.101:9500',
+    auth: {
+      username: 'elastic',
+      password: 'threebus'
+    }
   })],
   providers: [LoggingService],
 })

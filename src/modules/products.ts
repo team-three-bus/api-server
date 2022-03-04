@@ -13,6 +13,7 @@ import { LikeDao } from '../dao/like';
 import { UsersDao } from '../dao/users';
 import LoggingService from '../services/logging';
 import { ElasticsearchModule } from '@nestjs/elasticsearch';
+import RecommendService from "../services/recommend";
 
 @Module({
   imports: [TypeOrmModule.forFeature([ProductsEntity, EventsEntity, LikeEntity, UsersEntity]),
@@ -24,7 +25,7 @@ import { ElasticsearchModule } from '@nestjs/elasticsearch';
       }
   })],
   controllers: [ProductsController],
-  providers: [ProductsService, UsersService, LoggingService, ProductsDao, EventsDao, LikeDao, UsersDao],
+  providers: [ProductsService, UsersService, LoggingService, RecommendService, ProductsDao, EventsDao, LikeDao, UsersDao],
 })
 export class ProductsModule {
 }

@@ -5,13 +5,15 @@ import { InqueryCondition } from '../types/products.category.condition';
 import { decodeJWT } from '../utils/jwt';
 import { Response } from 'express';
 import LoggingService from '../services/logging';
+import RecommendService from "../services/recommend";
 
 @Controller('products')
 export class ProductsController {
   public constructor(
     private readonly productsService: ProductsService,
     private readonly usersService: UsersService,
-    private readonly loggingService: LoggingService
+    private readonly loggingService: LoggingService,
+    private readonly recommendService: RecommendService
   ) {
   }
 
@@ -25,6 +27,8 @@ export class ProductsController {
     if (isUser?.id) {
       await this.loggingService.putDocument(isUser.id,product.name,product.id, product.price);
     }
+
+    await this.recommendService.updateViewCount(product.id);
 
     return {
       product: product,
