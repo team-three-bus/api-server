@@ -4,7 +4,6 @@ import { Repository } from 'typeorm';
 import { UsersEntity } from '../entitys/users';
 import { AddUsersDto } from '../dto/users';
 
-
 @Injectable()
 export class UsersDao {
   constructor (
@@ -27,9 +26,17 @@ export class UsersDao {
 
   public async updateUserName(socialId: string, name: string) {
     await this.userRepository.update({
-      socialId: socialId
-    }, {
-      nickname: name
+        socialId: socialId,
+      },
+      {
+        nickname: name,
+      },
+    );
+  }
+
+  public async deleteUser(id: number) {
+    await this.userRepository.delete({
+      id: id,
     });
   }
 }

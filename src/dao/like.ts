@@ -46,4 +46,10 @@ export class LikeDao {
       }
     });
   }
+
+  public async deleteLikeByUserDelete(userId: number) {
+    await this.likeRepository.delete({
+      userId: userId,
+    });
+  }
 }

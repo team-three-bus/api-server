@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { UsersDao } from '../dao/users';
+import { LikeDao } from '../dao/like';
 import { AddUsersDto } from '../dto/users';
 import { createJWT, decodeJWT } from '../utils/jwt';
-import axios from "axios";
-
+import axios from 'axios';
 
 @Injectable()
 export class UsersService {
-  public constructor(private usersDao: UsersDao) {}
+  public constructor(private usersDao: UsersDao, private likesDao: LikeDao) {}
   
   public async login(token: string) {
     const kakaoUser = await this.getKakaoUser(token);
@@ -64,5 +64,10 @@ export class UsersService {
 
   public async updateUserName(socialId: string, name: string) {
     await this.usersDao.updateUserName(socialId, name);
+  }
+
+  public async deleteUser(id: number) {
+    await this.likesDao.deleteLikeByUserDelete(id);
+    await this.usersDao.deleteUser(id);
   }
 }
