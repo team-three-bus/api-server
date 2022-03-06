@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Headers, Res, HttpStatus, Put} from '@nestjs/common';
+import { Controller, Get, Post, Body, Headers, Res, HttpStatus, Put, Delete} from '@nestjs/common';
 import { UsersService } from '../services/users';
 import { decodeJWT } from '../utils/jwt';
 import { Response } from 'express';
@@ -7,7 +7,7 @@ import { Response } from 'express';
 @Controller('users')
 export class UsersController {
   public constructor(private readonly usersService: UsersService) {}
-  
+
   @Post('/')
   public async login(@Headers() headers): Promise<any> {
     
@@ -16,6 +16,26 @@ export class UsersController {
     return {
       jwt: userData
     };
+  }
+
+  @Delete('/')
+  public async awatUser(
+    @Headers() headers,
+    @Res() res: Response,
+  ): Promise<any> {
+    if (!headers.authorization) {
+      res.status(401).json({ message: '토큰을 첨부해주세요.' });
+    }
+    const userTokenPayload = decodeJWT(headers.authorization);
+
+    if (!userTokenPayload) {
+      res.status(401).json({ message: '재 로그인이 필요합니다.' });
+    }
+    const user = await this.usersService.getUser(userTokenPayload.socialId);
+
+    await this.usersService.deleteUser(user.id);
+
+    res.json({});
   }
 
   @Get('/mypage')
