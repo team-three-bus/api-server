@@ -54,7 +54,17 @@ export class ProductsDao {
       where: {
         id: In(id)
       }
-    })
+    });
+  }
+
+  public async getSameProducts(id: number[], category: string) {
+    return await this.productsRepository.find({
+      where: {
+        id: In(id),
+        category: category,
+      },
+      take: 10,
+    });
   }
 
   public async getLikeProducts(

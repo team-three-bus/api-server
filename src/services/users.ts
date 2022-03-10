@@ -34,6 +34,7 @@ export class UsersService {
         Authorization: `Bearer ${token}`
       }
     })
+    console.log(kakaoRes);
 
     return {
       result: "SUCCESS",

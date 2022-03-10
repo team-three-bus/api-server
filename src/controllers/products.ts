@@ -13,9 +13,9 @@ export class ProductsController {
     private readonly productsService: ProductsService,
     private readonly usersService: UsersService,
     private readonly loggingService: LoggingService,
-    private readonly recommendService: RecommendService
-  ) {
-  }
+    private readonly recommendService: RecommendService,
+
+  ) {}
 
   @Get('/')
   public async getProduct(@Headers() headers, @Query('id') id) {
@@ -32,6 +32,35 @@ export class ProductsController {
 
     return {
       product: product,
+    };
+  }
+
+  @Get('/v2')
+  public async getProductAndSameProduct(@Headers() headers, @Query('id') id) {
+    const isUser = await this.usersService.isUser(headers?.authorization);
+
+    const product = await this.productsService.viewProductId(id, isUser?.id);
+    console.log(id, product.category);
+    const sameProductList = await this.productsService.getSameProduct(
+      id,
+      product.category,
+      isUser?.id,
+    );
+    // 유저가 상품을 클릭할때 로깅데이터를 엘라스틱서치에 보낸다
+    if (isUser?.id) {
+      await this.loggingService.putDocument(
+        isUser.id,
+        product.name,
+        product.id,
+        product.price,
+      );
+    }
+
+    await this.recommendService.updateViewCount(product.id);
+
+    return {
+      product: product,
+      sameProductList: sameProductList,
     };
   }
 
