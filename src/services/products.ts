@@ -2,8 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { ProductsDao } from '../dao/products';
 import { EventsDao } from '../dao/events';
 import { LikeDao } from '../dao/like';
+import { ProductAttrDao } from '../dao/productAttr';
 import { UsersEntity } from '../entitys/users';
 import { OrderType } from '../types/products.category.condition';
+import { ProductsEntity } from 'src/entitys/products';
 
 const PRODUCT_LIMIT = 10;
 
@@ -12,16 +14,16 @@ export class ProductsService {
   public constructor(
     private productsDao: ProductsDao,
     private eventsDao: EventsDao,
-    private likeDao: LikeDao
+    private likeDao: LikeDao,
+    private productAttrDao: ProductAttrDao,
   ) {}
 
-  public async viewProductId (id: number, userId?: number): Promise<any> {
+  public async viewProductId(id: number, userId?: number): Promise<any> {
     const product = await this.productsDao.getProduct(id);
     await this.productsDao.upViewCnt(id, product.viewCnt + 1);
     product.viewCnt = product.viewCnt + 1;
     let isLike = false;
     if (userId) {
-
       if (await this.likeDao.checkLikeProduct(product.id, userId)) {
         isLike = true;
       }
@@ -30,10 +32,40 @@ export class ProductsService {
     return product;
   }
 
-  public async popularProductList (
+  public async getSameProduct(
+    id: number,
+    category: string,
+    userId?: number,
+  ): Promise<any> {
+    let likeProductList: number[] = [];
+    if (userId) {
+      const likeProducts = await this.likeDao.likeListProduct(userId);
+      likeProductList = likeProducts.map((x) => x.productId);
+    }
+    const productAttr = await this.productAttrDao.getProductAttr(id);
+    const productAttrList = await this.productAttrDao.getProductIdByAttr(
+      productAttr.firstAttr,
+    );
+    const productIdList = productAttrList.map((x) => parseInt(x.productId));
+    const sameProductList = await this.productsDao.getSameProducts(
+      productIdList,
+      category,
+    );
+    sameProductList.forEach((x) => {
+      let isLike = false;
+      if (likeProductList.includes(x.id)) {
+        isLike = true;
+      }
+      x['isLike'] = isLike;
+      x['eventType'] = x.lastEventType;
+    });
+    return sameProductList;
+  }
+
+  public async popularProductList(
     page: number,
     category: string | undefined,
-    userId?: number
+    userId?: number,
   ) {
     let likeProductList: number[] = [];
     if (userId) {
@@ -41,27 +73,30 @@ export class ProductsService {
       likeProductList = likeProducts.map((x) => x.productId);
     }
 
-    const productList = await this.productsDao.getPopularProduct(category, page);
+    const productList = await this.productsDao.getPopularProduct(
+      category,
+      page,
+    );
     productList.forEach(x => {
       let isLike = false;
       if (likeProductList.includes(x.id)) {
         isLike = true;
       }
-      x["isLike"] = isLike;
-      x["eventType"] = x.lastEventType
+      x['isLike'] = isLike;
+      x['eventType'] = x.lastEventType;
     });
-    
-    return productList;
-  };
 
-  public async inCategoryProduct (
-    category: string[], 
+    return productList;
+  }
+
+  public async inCategoryProduct(
+    category: string[],
     page: number,
     getPageSize: number,
     brand: string[],
     order: string,
     event: string[],
-    userId?: number
+    userId?: number,
   ): Promise<any> {
     // @TODO 현재 개발을 위헤 year, month를 부여하였지만, 변경 필요 
     
