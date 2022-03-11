@@ -1,5 +1,4 @@
-// @ TODO 날짜 관련 미들웨어로 뺴야함 너무 중복되서 사용
-const mustTermsQuery = (text: string, brand?: string, eventtype?: string, category?: string) => {
+const mustTermsQuery = (text?: string, brand?: string, eventtype?: string, category?: string) => {
   const must = [];
   let eventtypeArr:any;
   if(eventtype && eventtype.split(",").length === 2) {
