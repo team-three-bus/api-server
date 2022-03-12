@@ -58,26 +58,29 @@ export class ProductsDao {
   }
 
   public async getSameProducts(id: number[], category: string) {
-    return await this.productsRepository.find({
-      where: {
+    return await this.productsRepository
+      .createQueryBuilder('product')
+      .where({
         id: In(id),
         category: category,
-      },
-      take: 10,
-    });
+        isEvent: true,
+      })
+      .orderBy('RAND()')
+      .limit(10)
+      .getMany();
   }
 
   public async getLikeProducts(
     id: number[],
     brand: string[],
     category: string[],
-    isEvent: Boolean | null
+    isEvent: Boolean | null,
   ) {
     const queryBuilder = this.productsRepository.createQueryBuilder('product');
     queryBuilder.where({
       id: In(id),
       brand: In(brand),
-      category: In(category)
+      category: In(category),
     });
     if (isEvent) {
       queryBuilder.andWhere({
