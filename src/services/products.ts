@@ -20,6 +20,7 @@ export class ProductsService {
 
   public async viewProductId(id: number, userId?: number): Promise<any> {
     const product = await this.productsDao.getProduct(id);
+    product.events = product.events.reverse().slice(0, 3);
     await this.productsDao.upViewCnt(id, product.viewCnt + 1);
     product.viewCnt = product.viewCnt + 1;
     let isLike = false;
@@ -46,6 +47,7 @@ export class ProductsService {
     const productAttrList = await this.productAttrDao.getProductIdByAttr(
       productAttr.firstAttr,
     );
+
     const productIdList = productAttrList.map((x) => parseInt(x.productId));
     const sameProductList = await this.productsDao.getSameProducts(
       productIdList,

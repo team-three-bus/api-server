@@ -36,7 +36,8 @@ export class ProductsDao {
   }
 
   public async getProduct(id: number): Promise<ProductsEntity> {
-    return await this.productsRepository.createQueryBuilder('product')
+    return await this.productsRepository
+      .createQueryBuilder('product')
       .leftJoinAndMapMany(
         'product.events',
         EventsEntity,
@@ -44,7 +45,7 @@ export class ProductsDao {
         'events.productId = product.id',
       )
       .where({
-        id: id
+        id: id,
       })
       .getOne();
   }

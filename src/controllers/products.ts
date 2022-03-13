@@ -40,7 +40,7 @@ export class ProductsController {
     const isUser = await this.usersService.isUser(headers?.authorization);
 
     const product = await this.productsService.viewProductId(id, isUser?.id);
-    console.log(id, product.category);
+
     const sameProductList = await this.productsService.getSameProduct(
       id,
       product.category,
