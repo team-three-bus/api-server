@@ -10,11 +10,23 @@ export class UsersController {
 
   @Post('/')
   public async login(@Headers() headers): Promise<any> {
-    
     const userData = await this.usersService.login(headers.authorization);
-    
+    if (!userData) {
+      return {
+        result: 'NotJoin',
+        kakaoToken: headers.authorization,
+      };
+    }
     return {
-      jwt: userData
+      jwt: userData,
+    };
+  }
+
+  @Post('/join')
+  public async join(@Headers() headers): Promise<any> {
+    const userData = await this.usersService.join(headers.authorization);
+    return {
+      jwt: userData,
     };
   }
 
