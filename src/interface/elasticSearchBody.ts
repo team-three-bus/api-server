@@ -9,5 +9,15 @@ export interface PostSearchBody {
   viewcnt: number,
   id: number
   category: string,
-  isevent: number
+  isevent: number,
+  createdat: Date,
+  updatedat: Date
+}
+
+export interface LoggingSearchBody {
+  userId:number,
+  productName: string,
+  productId: number,
+  price: number,
+  clickDate: Date
 }
