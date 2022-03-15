@@ -9,15 +9,14 @@ import {
 import { changeFormat, nowMonth, nowYear, sortObj } from "../utils/util";
 import { ProductsEntity } from "../entitys/products";
 import { ElasticAggResult, ElasticRecommendObject } from "../interface/elasticAggResult";
-import { mustTermsQuery, sortQuery } from "../utils/elasticUtils";
 
 @Injectable()
 export default class RecommendService {
+  loggingIndex = "logging-*"
+  productIndex = `products-${nowYear}-${nowMonth}`
 
   constructor(
     private readonly elasticsearchService: ElasticsearchService,
-    private readonly loggingIndex = "logging-*",
-    private readonly productIndex = `products-${nowYear}-${nowMonth}`
   ) {
   }
 
@@ -57,8 +56,7 @@ export default class RecommendService {
     const result = await this.elasticsearchService.search<ElasticAggregationsResult>(getClickProductsQuery);
     if (result.body.aggregations.user.buckets.length > 0) {
       // 있으면 상품리스트들을 쭉 던진다.
-      let buckets = result.body.aggregations.user.buckets[0].productclick.buckets;
-      console.log(buckets);
+      const buckets = result.body.aggregations.user.buckets[0].productclick.buckets;
       return result.body.aggregations.user.buckets[0].productclick.buckets;
     } else {
       // 없으면 빈 배열 리턴
@@ -118,6 +116,7 @@ export default class RecommendService {
           let isUpdate = false;
           for (const product of productsArr) {
             if (product.productId === productId) {
+              product.productName = clickProduct.productName;
               product.point += matchPoint;
               if(product.updatedAt < clickProduct.clickDate) {
                 product.updatedAt = clickProduct.clickDate
@@ -126,6 +125,7 @@ export default class RecommendService {
             }
           }
           if (isUpdate === false) {
+            tempObj.productName = clickProduct.productName;
             tempObj.productId = productId;
             tempObj.point = matchPoint;
             tempObj.updatedAt = clickProduct.clickDate;
@@ -145,18 +145,17 @@ export default class RecommendService {
         return b.point - a.point;
       }
     })
-    // 첫번째 매칭할 제품의 ID를 가지고와서 search 후 카테고리와 첫번째 속성을 뽑는다.
-    // 그다음 연관순으로 5개만 뽑는다.
-    // 똑같이 두번째도 한다
-    // 그다음 return 한다.
-    let tempObj = {};
+    let tempObj = {"list": []};
     for (let i=0; i<2; i++) {
+      if(!productsArr[i]) {
+        break;
+      }
       const matchQuery = {
         index: this.productIndex,
         body: {
           "query": {
             "match": {
-              "id": productsArr[i]
+              "id": productsArr[i].productId
             }
           }
         }
@@ -174,12 +173,12 @@ export default class RecommendService {
                 "must": [
                   {
                     "match": {
-                      "category": products[i]._source.category
+                      "category": products[0]._source.category
                     }
                   },
                   {
                     "match": {
-                      "firstattr": products[i]._source.firstattr
+                      "firstattr": products[0]._source.firstattr
                     }
                   }
                 ]
@@ -198,11 +197,12 @@ export default class RecommendService {
         const hits = body.hits.hits;
         const totalValue = body.hits.total["value"];
         if(totalValue >0) {
-
+          hits.map((item) => tempObj["list"].push(item._source))
         }
       }
-
     }
+    tempObj["productCnt"] = tempObj["list"].length;
+    return tempObj;
   }
 
   async getRecommendProduct(userId: number, size: number) {

@@ -5,6 +5,7 @@ export interface ElasticAggResult {
 
 export interface ElasticRecommendObject {
   productId: undefined | number,
+  productName: string,
   updatedAt: Date,
   point: number
 }

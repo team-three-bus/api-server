@@ -1,7 +1,7 @@
-import { Module } from '@nestjs/common';
-import { ElasticsearchModule } from '@nestjs/elasticsearch';
-import RecommendController from '../controllers/recommend';
-import RecommendService from '../services/recommend';
+import { Module } from "@nestjs/common";
+import { ElasticsearchModule } from "@nestjs/elasticsearch";
+import RecommendController from "../controllers/recommend";
+import RecommendService from "../services/recommend";
 import { UsersService } from "../services/users";
 import { LikeService } from "../services/like";
 import { UsersDao } from "../dao/users";
