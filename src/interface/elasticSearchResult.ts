@@ -1,4 +1,4 @@
-import { PostSearchBody } from "./elasticSearchBody";
+import { LoggingSearchBody, PostSearchBody } from "./elasticSearchBody";
 
 export interface ElasticSearchResult {
   hits: {
@@ -6,6 +6,18 @@ export interface ElasticSearchResult {
     hits: Array<{
       _source: PostSearchBody;
     }>;
+  };
+}
+
+export interface ElasticLoggingResult {
+  hits: {
+    total: {
+      value: number,
+      relation: string
+    }
+    hits: {
+      _source: LoggingSearchBody;
+    };
   };
 }
 

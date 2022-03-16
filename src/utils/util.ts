@@ -1,5 +1,5 @@
-import * as moment from 'moment';
-import 'moment-timezone';
+import * as moment from "moment";
+import "moment-timezone";
 moment.tz.setDefault('Asia/Seoul');
 
 export const isEmpty = (value: string | number | object): boolean => {
@@ -30,3 +30,6 @@ export const nowYearMonthDay = moment().format('YYYYMMDD');
 export const clickDate = moment().format('YYYY-MM-DD HH:mm:ss');
 export const nowYear = moment().format('YYYY');
 export const nowMonth = moment().format('M');
+export const changeFormat = (dateObj: Date): string => {
+  return moment(dateObj).format('YYYY-MM-DD HH:mm:ss')
+}
