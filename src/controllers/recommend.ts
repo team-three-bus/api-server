@@ -17,7 +17,6 @@ export default class RecommendController {
 
   @Get("/")
   async getRecommendProduct(@Headers() headers, @Query("size") size: number, @Res() res: Response) {
-    // 로그인한 유저와 안한 유저를 나눈다.
 
     if (headers.authorization) {
       const userTokenPayload = decodeJWT(headers.authorization);
@@ -36,12 +35,15 @@ export default class RecommendController {
         } else {
           const products = await this.recommendService.extractProducts(likeList, clickProducts, user.id);
           const recommendProducts = await this.recommendService.matchProduct(products);
+          recommendProducts["isDefault"] = "no";
+          recommendProducts["matchProducts"] = [...products];
           return res.status(200).json(recommendProducts);
         }
       }
     } else {
       // 로그인을 안한 유저
       const defaultProduct = await this.recommendService.defaultRecommendProduct();
+      defaultProduct["isDefault"] = "yes";
       return res.status(200).json(defaultProduct);
     }
 

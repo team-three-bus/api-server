@@ -71,6 +71,7 @@ export default class RecommendService {
         let tempObj: ElasticRecommendObject | any = {};
         tempObj.productId = product.id;
         tempObj.point = 2;
+        tempObj.productName = product.name;
         tempObj.updatedAt = changeFormat(product.updatedAt);
         productsArr.push(tempObj);
       }
