@@ -36,12 +36,7 @@ const mustTermsQuery = (text?: string, brand?: string, eventtype?: string, categ
       category: category.split(",")
     }
   }) : "";
-
-  must.push({
-    match: {
-      isevent: 1
-    }
-  });
+  
   return must;
 };
 
