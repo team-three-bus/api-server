@@ -11,7 +11,8 @@ export interface PostSearchBody {
   category: string,
   isevent: number,
   createdat: Date,
-  updatedat: Date
+  updatedat: Date,
+  isLikeProduct?:string
 }
 
 export interface LoggingSearchBody {

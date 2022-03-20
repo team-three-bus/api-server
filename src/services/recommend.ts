@@ -147,6 +147,7 @@ export default class RecommendService {
       }
     })
     let tempObj = {"list": []};
+    let isSameAttribute = {};
     for (let i=0; i<2; i++) {
       if(!productsArr[i]) {
         break;
@@ -164,7 +165,10 @@ export default class RecommendService {
       const { body } = await this.elasticsearchService.search<ElasticSearchResult>(matchQuery);
       const products = body.hits.hits;
       const totalValue = body.hits.total["value"];
-      if (totalValue > 0) {
+      if(!isSameAttribute["category"] && !isSameAttribute["firstattr"]) {
+        isSameAttribute["category"] = products[0]._source.category;
+        isSameAttribute["firstattr"] = products[0]._source.firstattr;
+        if (totalValue > 0) {
         const matchProductQuery = {
           index: this.productIndex,
           body: {
@@ -198,7 +202,52 @@ export default class RecommendService {
         const hits = body.hits.hits;
         const totalValue = body.hits.total["value"];
         if(totalValue >0) {
-          hits.map((item) => tempObj["list"].push(item._source))
+          hits.map((item) => {
+            item._source.isLikeProduct = 'N';
+            tempObj["list"].push(item._source)
+          })
+        }
+      }
+      } else if(isSameAttribute["category"] && isSameAttribute["firstattr"] && isSameAttribute["category"] !== products[0]._source.category || isSameAttribute["firstattr"] !== products[0]._source.firstattr) {
+        if (totalValue > 0) {
+          const matchProductQuery = {
+            index: this.productIndex,
+            body: {
+              "size": 5,
+              "query": {
+                "bool": {
+                  "must": [
+                    {
+                      "match": {
+                        "category": products[0]._source.category
+                      }
+                    },
+                    {
+                      "match": {
+                        "firstattr": products[0]._source.firstattr
+                      }
+                    }
+                  ]
+                }
+              },
+              "sort": [
+                {
+                  "viewcnt": {
+                    "order": "desc"
+                  }
+                }
+              ]
+            }
+          };
+          const { body } = await this.elasticsearchService.search<ElasticSearchResult>(matchProductQuery);
+          const hits = body.hits.hits;
+          const totalValue = body.hits.total["value"];
+          if(totalValue >0) {
+            hits.map((item) => {
+              item._source.isLikeProduct = 'N';
+              tempObj["list"].push(item._source)
+            })
+          }
         }
       }
     }
@@ -379,5 +428,16 @@ export default class RecommendService {
       }
     };
     const apiResponse = await this.elasticsearchService.updateByQuery<ElasticUpdateResult>(updateQuery);
+  }
+
+  async isLikeProduct(likeList, matchProducts) {
+    likeList.forEach(likeObj => {
+      matchProducts.list.forEach(product => {
+        if(likeObj.id === product.id) {
+          product.isLikeProduct = 'Y'
+        }
+      })
+    })
+    return matchProducts;
   }
 }
