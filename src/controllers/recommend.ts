@@ -34,7 +34,8 @@ export default class RecommendController {
           return res.status(200).json(defaultProduct);
         } else {
           const products = await this.recommendService.extractProducts(likeList, clickProducts, user.id);
-          const recommendProducts = await this.recommendService.matchProduct(products);
+          const matchProducts = await this.recommendService.matchProduct(products);
+          const recommendProducts = await this.recommendService.isLikeProduct(likeList, matchProducts);
           recommendProducts["isDefault"] = "no";
           recommendProducts["matchProducts"] = [...products];
           return res.status(200).json(recommendProducts);
@@ -47,13 +48,5 @@ export default class RecommendController {
       return res.status(200).json(defaultProduct);
     }
 
-
-    // const recommendProduct = await this.recommendService.getRecommendProduct(userId, size);
-    // if (recommendProduct) {
-    //   return res.status(200).json(recommendProduct);
-    // } else {
-    //   const defaultProduct = await this.recommendService.defaultRecommendProduct();
-    //   return res.status(200).json(defaultProduct);
-    // }
   }
 }
