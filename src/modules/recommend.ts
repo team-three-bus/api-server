@@ -14,7 +14,7 @@ import { ProductsEntity } from "../entitys/products";
 
 @Module({
   imports: [ElasticsearchModule.register({
-    node: 'http://34.64.247.101:9500',
+    node: 'http://34.64.152.242:9500',
     auth: {
       username: 'elastic',
       password: 'threebus'
